@@ -48,8 +48,6 @@ cagi-ed/
 ├── results/        # tables/, figures/, reports/ — toàn bộ số liệu/hình/báo cáo đã freeze
 ├── tests/          # 197 test (pytest tests/ -v)
 ├── scripts/        # Script tái tạo/mining/đánh giá (reproduce_main.sh là điểm bắt đầu)
-├── kaggle_upload/  # Gói dataset + notebook để đăng Kaggle
-└── paper/          # Bản thảo bài báo/KLTN
 ```
 
 ## Cách chạy / tái lập
