@@ -12,7 +12,7 @@ Các hệ thống truy vết rửa tiền DeFi hiện có (ví dụ AMLGuard, IS
 Leave-one-incident-out, 15 fold, bootstrap CI 95% mức incident:
 
 | Model | Mean PR-AUC |
-|---|---|---|
+|---|---|
 | B3 (untyped/flat) | 0.6875 |
 | M1 (typed motif) | 0.6911 | 
 
