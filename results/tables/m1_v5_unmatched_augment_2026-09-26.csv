@@ -1,0 +1,2 @@
+model,mean_pr_auc,ci_low_95,ci_high_95,paired_diff_vs_m1,paired_ci_low_vs_m1,paired_ci_high_vs_m1,paired_diff_vs_b3,paired_ci_low_vs_b3,paired_ci_high_vs_b3,mean_n_unmatched_added_per_fold
+M1_v5_unmatched_augment,0.615162576789069,0.5009100850149638,0.8434239055006196,0.011200926397887605,-0.042542342152533226,0.07119399280872639,0.0467451049731406,-0.0251445654800921,0.1260616015097291,3073.4666666666667

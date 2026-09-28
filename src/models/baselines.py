@@ -26,6 +26,7 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
 
 try:
     from xgboost import XGBClassifier
@@ -282,7 +283,8 @@ class M1TypedTemporalMotifModel:
     name = "M1_typed_temporal_motif_xgboost"
 
     def __init__(
-        self, min_positive_incident_coverage: int = 2, include_bridge_context: bool = False, **model_kwargs
+        self, min_positive_incident_coverage: int = 2, include_bridge_context: bool = False,
+        scale_pos_weight_strategy: str = "auto", **model_kwargs
     ) -> None:
         self.min_positive_incident_coverage = min_positive_incident_coverage
         # include_bridge_context: CHI dung cho ablation/investigation (vd
@@ -290,6 +292,15 @@ class M1TypedTemporalMotifModel:
         # tai tao lai hanh vi CU (truoc 2026-08-28) khi can doi chieu. KHONG
         # dat True cho M1 chinh thuc dung trong RQ1/RQ2.
         self.include_bridge_context = include_bridge_context
+        # scale_pos_weight_strategy (NSS 2026, Viec 1 - nested HPO): mac dinh
+        # "auto" TAI TAO Y HET cong thuc cu (n_neg/n_pos, khong doi hanh vi
+        # M1 chinh thuc). Cac lua chon khac CHI dung cho tuning/investigation:
+        # "none" = 1.0 co dinh (khong bu mat can bang), "auto_sqrt" =
+        # sqrt(n_neg/n_pos) (giam nhe muc bu so voi auto), "auto_half"/
+        # "auto_double" = nhan 0.5x/2x ti le auto.
+        if scale_pos_weight_strategy not in ("auto", "none", "auto_sqrt", "auto_half", "auto_double"):
+            raise ValueError(f"scale_pos_weight_strategy khong hop le: {scale_pos_weight_strategy}")
+        self.scale_pos_weight_strategy = scale_pos_weight_strategy
         self._model_kwargs = model_kwargs
         self.feature_cols_: List[str] = []
         self.excluded_low_coverage_: List[str] = []
@@ -308,7 +319,16 @@ class M1TypedTemporalMotifModel:
             cols.append(c)
         return cols
 
-    def fit(self, X_train: pd.DataFrame, y_train: Sequence[int], groups_train: Sequence = None) -> "M1TypedTemporalMotifModel":
+    def fit(
+        self, X_train: pd.DataFrame, y_train: Sequence[int], groups_train: Sequence = None,
+        sample_weight: Sequence[float] = None,
+    ) -> "M1TypedTemporalMotifModel":
+        """`sample_weight` (NSS 2026, lan thu 6 - trong so "moi trajectory
+        cong bang"): tuy chon, MAC DINH None (giu nguyen HANH VI CU tuyet
+        doi cho moi noi goi .fit(X,y,groups) khong truyen tham so nay).
+        Neu truyen, NHAN (khong thay the) voi scale_pos_weight da tinh ben
+        duoi - ca 2 deu la trong so nhan vao gradient cua XGBoost, tuong
+        thich, khong xung dot."""
         raw_action_cols = [c for c in X_train.columns if c.startswith("action_count_") and not c.endswith("_ratio")]
         self.excluded_raw_action_count_ = raw_action_cols
         self.excluded_bridge_context_ = (
@@ -324,7 +344,17 @@ class M1TypedTemporalMotifModel:
         y_arr = np.asarray(y_train)
         n_pos = int((y_arr == 1).sum())
         n_neg = int((y_arr == 0).sum())
-        scale_pos_weight = (n_neg / n_pos) if n_pos > 0 else 1.0
+        auto_spw = (n_neg / n_pos) if n_pos > 0 else 1.0
+        if self.scale_pos_weight_strategy == "auto":
+            scale_pos_weight = auto_spw
+        elif self.scale_pos_weight_strategy == "none":
+            scale_pos_weight = 1.0
+        elif self.scale_pos_weight_strategy == "auto_sqrt":
+            scale_pos_weight = auto_spw ** 0.5
+        elif self.scale_pos_weight_strategy == "auto_half":
+            scale_pos_weight = auto_spw * 0.5
+        else:  # "auto_double"
+            scale_pos_weight = auto_spw * 2.0
 
         if _HAS_XGBOOST:
             params = dict(
@@ -338,12 +368,68 @@ class M1TypedTemporalMotifModel:
             params.update(self._model_kwargs)
             self.model = RandomForestClassifier(**params)
 
-        self.model.fit(X_train[kept], y_train)
+        if sample_weight is not None:
+            self.model.fit(X_train[kept], y_train, sample_weight=sample_weight)
+        else:
+            self.model.fit(X_train[kept], y_train)
         return self
 
     def predict_proba(self, X: pd.DataFrame) -> np.ndarray:
         Xb = X[self.feature_cols_]
         return self.model.predict_proba(Xb)[:, 1]
+
+
+class T13LogisticRegressionM1Features:
+    """NSS 2026 (T13): Logistic Regression trên ĐÚNG feature vector của M1
+    (cùng `_candidate_columns` + cùng `_filter_low_coverage_columns`) — chỉ
+    đổi model tuyến tính thay cho cây quyết định/boosting, KHÔNG đổi feature
+    hay protocol đánh giá. Trả lời câu hỏi phản biện "có cần cây quyết định
+    không hay linear đã đủ" trên đúng cùng biểu diễn dữ liệu với M1.
+
+    Dùng `StandardScaler` (fit trên train fold, áp dụng lại cho test fold) vì
+    Logistic Regression nhạy với thang đo giữa các cột, khác XGBoost/RandomForest
+    (bất biến theo scale) — đây là lựa chọn tiền xử lý riêng của model này,
+    không phải thay đổi protocol đánh giá chung.
+    """
+
+    name = "T13_logreg_m1_features"
+
+    def __init__(self, min_positive_incident_coverage: int = 2, **lr_kwargs) -> None:
+        self.min_positive_incident_coverage = min_positive_incident_coverage
+        self.scaler = StandardScaler()
+        params = dict(max_iter=2000, class_weight="balanced", random_state=42)
+        params.update(lr_kwargs)
+        self.model = LogisticRegression(**params)
+        self.feature_cols_: List[str] = []
+        self.excluded_low_coverage_: List[str] = []
+
+    def _candidate_columns(self, X: pd.DataFrame) -> List[str]:
+        # GIONG HET M1TypedTemporalMotifModel._candidate_columns (cung feature vector)
+        cols = []
+        for c in X.columns:
+            if c in ("prefix_len", "prefix_ratio_meta"):
+                continue
+            if c.startswith("action_count_") and not c.endswith("_ratio"):
+                continue
+            if c in BRIDGE_CONTEXT_COLS_EXCLUDED:
+                continue
+            cols.append(c)
+        return cols
+
+    def fit(self, X_train: pd.DataFrame, y_train: Sequence[int], groups_train: Sequence = None) -> "T13LogisticRegressionM1Features":
+        candidate_cols = self._candidate_columns(X_train)
+        kept, excluded = _filter_low_coverage_columns(
+            X_train, y_train, groups_train, candidate_cols, self.min_positive_incident_coverage,
+        )
+        self.excluded_low_coverage_ = excluded
+        self.feature_cols_ = kept
+        Xs = self.scaler.fit_transform(X_train[kept])
+        self.model.fit(Xs, y_train)
+        return self
+
+    def predict_proba(self, X: pd.DataFrame) -> np.ndarray:
+        Xs = self.scaler.transform(X[self.feature_cols_])
+        return self.model.predict_proba(Xs)[:, 1]
 
 
 def get_all_baselines() -> Dict[str, BaselineModel]:

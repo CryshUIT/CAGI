@@ -1,0 +1,2 @@
+model,mean_pr_auc,ci_low_95,ci_high_95,paired_diff_vs_m1,paired_ci_low_vs_m1,paired_ci_high_vs_m1,paired_diff_vs_b3,paired_ci_low_vs_b3,paired_ci_high_vs_b3,pr_auc_ratio50_m1_v2,pr_auc_ratio50_m1_official,n_rows_ratio50,n_positive_ratio50
+M1_v2_mid_trajectory_features,0.6527527253174128,0.51282339863393,0.8835737480319205,-0.002706946586265324,-0.022067397127464656,0.01509427622890408,0.03283723198898767,-0.030435749768709486,0.12298018220571634,0.8601349685173215,0.8748571907395436,241,15

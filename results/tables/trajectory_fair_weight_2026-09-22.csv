@@ -1,0 +1,2 @@
+model,mean_pr_auc,ci_low_95,ci_high_95,paired_diff_vs_m1,paired_ci_low,paired_ci_high,mean_diff_short_incidents,mean_diff_long_incidents
+trajectory_fair_weight,0.6969674008764495,0.5551215862546792,0.9084874352439352,-0.030646457791533972,-0.12048469366589042,0.045821369226043844,-0.0731343177802067,0.006530419698554654

@@ -1,0 +1,2 @@
+model,mean_pr_auc,ci_low_95,ci_high_95,paired_diff_vs_m1,paired_ci_low_vs_m1,paired_ci_high_vs_m1,paired_diff_vs_b3,paired_ci_low_vs_b3,paired_ci_high_vs_b3,n_fixed_of_16
+M1_v7_unmatched_fraction_tuned,0.6259112288904025,0.49890073626527964,0.8386851920654099,-0.04510388825358483,-0.11567150343769536,0.013532934251523736,-0.009559709678331833,-0.13023132496346024,0.11512858156842871,5

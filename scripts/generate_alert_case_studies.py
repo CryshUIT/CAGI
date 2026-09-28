@@ -12,6 +12,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from src.features.aadapt_mapping import format_aadapt_ids
 from src.models.baselines import M1TypedTemporalMotifModel
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -24,17 +25,26 @@ META_COLS = ["trajectory_id", "source_id", "group_id", "kind", "chain", "label",
 
 # (source_id, group_id, prefix_label, prefix_len) cho 2 case da chon (xem
 # ket qua truy van thu cong tu rq2_oof_predictions.csv):
+#
+# CHON LAI 2026-09-27 (khi wire AADAPT mapping vao script nay): 2 case cu
+# (ratio_25/prefix_len=13 cho qbridge_qubit_2022; paraluni_2022__hn013) DA
+# BI LECH DU LIEU tu cac lan sua bug value_share/token_diversity truoc do
+# (qbridge_qubit_2022 tang tu 52->698 action, cac prefix_len cu khong con
+# ton tai; paraluni_2022__hn013 KHONG con la false positive that nua sau
+# cac fix). Da kiem tra lai truc tiep tu rq2_oof_predictions.csv HIEN TAI.
 TP_CASE = {"source_id": "qbridge_qubit_2022", "group_id": "qbridge_qubit_2022",
-           "prefix_label": "ratio_25", "prefix_len": 13}
-# CHON LAI sau khi sua bug generate_prefixes (Tuan 7, xem
-# rq2_ratio100_diagnostic.md): hn005/k_3 KHONG con la false positive that
-# nua (prob=0.9510 < threshold=1.0000 tren du lieu da sua, khong con kich
-# hoat alert) - chon lai tu rq2_oof_predictions.csv (label=0, oof_prob >=
-# oof_threshold, THAT su la false positive), uu tien paraluni_2022 (van
-# la incident yeu nhat, xem error_analysis_v1.md) de giu tinh nhat quan
-# narrative voi bao cao truoc.
-FP_CASE = {"source_id": "paraluni_2022__hn013", "group_id": "paraluni_2022",
-           "prefix_label": "ratio_50", "prefix_len": 5}
+           "prefix_label": "k_5", "prefix_len": 5}
+# FP case moi: false positive TIN CAY NHAT trong toan bo rq2_oof_predictions.csv
+# hien tai (oof_prob=0.9980 >> threshold=0.9895) - CHINH LA
+# `ronin_benign_control_2022`, 1 giao dich BENIGN DA XAC MINH provenance
+# that (nguoi choi Axie Infinity rut tien hop phap 2 ngay TRUOC vu hack
+# Ronin, xem metadata/incident_registry.csv) nhung bi mine "khop cau truc"
+# (bridge_withdraw->swap) voi ronin_bridge_2022 nen rat kho phan biet - day
+# cung chinh la 1 trong 2 trajectory gay 83% false positive toan du an da
+# chan doan trong qua trinh cai thien M1 (results/reports/
+# m1_v3_path_depth_efficiency_2026-09-26.md).
+FP_CASE = {"source_id": "ronin_benign_control_2022", "group_id": "ronin_bridge_2022",
+           "prefix_label": "ratio_50", "prefix_len": 52}
 
 
 def _rebuild_hard_negative_events(hard_negative_id: str) -> list:
@@ -136,19 +146,20 @@ def format_case_md(title, info, note=None):
     if note:
         lines.append(f"\n> {note}\n")
     lines += [
-        "\n**Top-3 motif đóng góp (|SHAP-like value|, XGBoost pred_contribs):**\n",
-        "\n| Motif feature | Giá trị feature | Đóng góp |\n|---|---|---|\n",
+        "\n**Top-3 motif đóng góp (|SHAP-like value|, XGBoost pred_contribs), kèm AADAPT ID "
+        "(Table 2, `tab:aadapt`):**\n",
+        "\n| Motif feature | Giá trị feature | Đóng góp | AADAPT ID |\n|---|---|---|---|\n",
     ]
     for feat, contrib in info["top_motifs"].items():
         val = info["row"][feat] if feat in info["row"].index else float("nan")
-        lines.append(f"| {feat} | {val:.4f} | {info['contribs'][feat]:+.4f} |\n")
+        lines.append(f"| {feat} | {val:.4f} | {info['contribs'][feat]:+.4f} | {format_aadapt_ids(feat)} |\n")
     lines += [
-        "\n**Top-5 feature đóng góp (toàn bộ, không chỉ motif):**\n",
-        "\n| Feature | Giá trị feature | Đóng góp |\n|---|---|---|\n",
+        "\n**Top-5 feature đóng góp (toàn bộ, không chỉ motif), kèm AADAPT ID nếu có:**\n",
+        "\n| Feature | Giá trị feature | Đóng góp | AADAPT ID |\n|---|---|---|---|\n",
     ]
     for feat, _ in info["top_features"].items():
         val = info["row"][feat] if feat in info["row"].index else float("nan")
-        lines.append(f"| {feat} | {val:.4f} | {info['contribs'][feat]:+.4f} |\n")
+        lines.append(f"| {feat} | {val:.4f} | {info['contribs'][feat]:+.4f} | {format_aadapt_ids(feat)} |\n")
     lines.append(f"\n(bias term = {info['contribs']['bias']:+.4f})\n")
     lines += [
         f"\n**{info['case']['prefix_len']} action trong prefix (tx_hash link):**\n\n",
@@ -173,7 +184,7 @@ def main():
     print("Top motif:", tp_info["top_motifs"].to_dict())
     print("Top feature:", tp_info["top_features"].to_dict())
 
-    print("\n=== Case 2: False positive (paraluni_2022 hard-negative) ===")
+    print("\n=== Case 2: False positive (ronin_benign_control_2022) ===")
     fp_info = describe_case(df, feature_cols, FP_CASE, label_expected=0, oof_df=oof_df)
     print(f"prob={fp_info['prob']:.4f} threshold={fp_info['threshold']:.4f}")
     print("Top motif:", fp_info["top_motifs"].to_dict())
@@ -189,16 +200,17 @@ def main():
         + format_case_md(
             f"Case 2 — False Positive ({FP_CASE['source_id']})", fp_info,
             note=(
-                "**Nguyên nhân đã điều tra kỹ (Tuần 10)**: candidate này chính là "
-                "hard-negative gây nhiễu nhiều nhất trong toàn bộ đánh giá per-incident của "
-                "`paraluni_2022` (incident khó nhất xuyên suốt B2/B3/M1) — xem "
-                "`results/reports/paraluni_2022_reinvestigation.md`. Nguyên nhân KHÔNG phải "
-                "đặc điểm tổng thể (độ dài/motif/volume band của toàn incident đều bình "
-                "thường so với 10 incident khác), mà là `log_amount_mean` của CHÍNH candidate "
-                "này ở prefix ngắn tương đối cao (đóng góp SHAP dương lớn, xem bảng dưới), "
-                "khiến model tự tin nhầm ở giai đoạn quan sát sớm — trùng khớp với `log_amount_mean` "
-                "thấp bất thường ở prefix ngắn của chính positive `paraluni_2022`, làm 2 tín hiệu "
-                "\"đối lập nhau\" bị model xếp hạng sai."
+                "**Cập nhật 2026-09-27**: `ronin_benign_control_2022` là false positive tin cậy "
+                "nhất trong toàn bộ `rq2_oof_predictions.csv` hiện tại (case cũ `paraluni_2022__hn013` "
+                "không còn kích hoạt alert sau các lần sửa bug value_share/token_diversity). Đây là "
+                "1 giao dịch BENIGN đã xác minh provenance thật (người chơi Axie Infinity rút tiền hợp "
+                "pháp 2 ngày TRƯỚC vụ hack Ronin Bridge, xem `metadata/incident_registry.csv`) nhưng "
+                "bị mine \"khớp cấu trúc\" (bridge_withdraw→swap) với chính `ronin_bridge_2022` nên rất "
+                "khó phân biệt. Đây cũng là 1 trong 2 trajectory gây 83% false positive toàn dự án đã "
+                "chẩn đoán kỹ trong quá trình cải thiện M1 (`path_depth` bị model học thành ranh giới "
+                "gần-tuyệt-đối — xem `results/reports/m1_v3_path_depth_efficiency_2026-09-26.md`). "
+                "3 lần thử sửa (thêm feature tỷ lệ, biến đổi path_depth, loại bỏ hẳn) đều KHÔNG sửa "
+                "được ca này — xem `results/reports/m1_improvement_attempts_2026-09-22.md` attempt #9/10/12."
             ),
         )
     )

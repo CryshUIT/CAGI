@@ -1,0 +1,16 @@
+incident_id,endpoint_type,endpoint_confirmed,trajectory_len,alert_prefix_bucket,lead_time_sec,lead_steps,status,note
+bsc_token_hub_2022,known_bridge_provenance_confirmed,True,362.0,k_3,-2274.0,359.0,alerted_after_endpoint,
+chibi_finance_2023,bridged_to_ethereum_confirmed,True,40.0,k_2,449.0,38.0,alerted_before_endpoint,
+deltaprime_arbitrum_2024,bridged_to_ethereum_confirmed,True,23.0,ratio_50,-12722.0,11.0,alerted_after_endpoint,
+feg_bridge_2024,known_mixer_confirmed,True,9.0,ratio_75,-300.0,2.0,alerted_after_endpoint,
+hackerdao_2022,multi_hop_token_conversion_confirmed,False,,,,,not_computable,endpoint_confirmed=False trong incident_registry.csv
+magic_abracadabra_arbitrum_2025,bridged_to_ethereum_reported_stargate,True,88.0,ratio_25,8515.0,66.0,alerted_before_endpoint,
+new_free_dao_2022,mixer_reported,True,12.0,ratio_25,-87.0,9.0,alerted_after_endpoint,
+paraluni_2022,known_mixer_confirmed,True,,,,,not_computable,endpoint_confirmed=True nhung khong co action terminal (bridge/mixer/lending) trong trajectory da decode
+qbridge_qubit_2022,not_yet_traced,False,,,,,not_computable,endpoint_confirmed=False trong incident_registry.csv
+radiant_capital_arbitrum_2024,bridged_to_ethereum_reported,True,248.0,k_2,313.0,246.0,alerted_before_endpoint,
+ronin_bridge_2022,not_yet_traced,False,,,,,not_computable,endpoint_confirmed=False trong incident_registry.csv
+utopiasphere_2024,bridged_confirmed,True,37.0,k_3,2477.0,34.0,alerted_before_endpoint,
+wault_finance_2021,known_mixer_confirmed,True,,,,,not_computable,endpoint_confirmed=True nhung khong co action terminal (bridge/mixer/lending) trong trajectory da decode
+wooppv2_2024,bridged_confirmed,True,16.0,,,,never_alerted,
+xkingdom_2024,known_mixer_confirmed,True,73.0,k_5,-149.0,68.0,alerted_after_endpoint,

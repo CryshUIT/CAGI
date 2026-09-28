@@ -1,0 +1,16 @@
+held_out_group,bucket,n_train_incidents,outer_pr_auc
+bsc_token_hub_2022,LONG,7,1.0
+chibi_finance_2023,SHORT,6,1.0
+deltaprime_arbitrum_2024,SHORT,6,1.0
+feg_bridge_2024,SHORT,6,1.0
+hackerdao_2022,SHORT,6,0.20115716734364647
+magic_abracadabra_arbitrum_2025,LONG,7,1.0
+new_free_dao_2022,SHORT,6,0.2822106464963608
+paraluni_2022,LONG,7,0.6543864121989122
+qbridge_qubit_2022,LONG,7,0.9305555555555556
+radiant_capital_arbitrum_2024,LONG,7,1.0
+ronin_bridge_2022,LONG,7,0.6325396825396825
+utopiasphere_2024,SHORT,6,1.0
+wault_finance_2021,LONG,7,1.0
+wooppv2_2024,SHORT,6,0.9317956349206349
+xkingdom_2024,LONG,7,0.9375

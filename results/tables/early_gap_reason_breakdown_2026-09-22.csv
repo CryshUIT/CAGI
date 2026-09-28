@@ -1,0 +1,14 @@
+incident_id,start_block,min_decoded_block,n_gap_events,reachability_reject,tainted_share_reject,other_reject,accepted_but_still_in_gap_window,tainted_share_would_flip_under_cumulative_denominator
+bsc_token_hub_2022,21933735,21954076,9324,9324,0,0,0,0
+chibi_finance_2023,105366596,105367396,37,37,0,0,0,0
+deltaprime_arbitrum_2024,273285000,273289415,366,366,0,0,0,0
+feg_bridge_2024,21506058,21506183,5,4,1,0,0,1
+hackerdao_2022,17361150,17361615,96,95,1,0,0,1
+magic_abracadabra_arbitrum_2025,319305624,319307181,4,4,0,0,0,0
+new_free_dao_2022,17689293,17690249,3,3,0,0,0,0
+qbridge_qubit_2022,14742000,14742387,2990,2990,0,0,0,0
+radiant_capital_arbitrum_2024,264477049,264482513,1194,1193,1,0,0,1
+ronin_bridge_2022,14442775,14442911,5340,5340,0,0,0,0
+utopiasphere_2024,40663985,40665083,1457,1454,3,0,0,3
+wault_finance_2021,9728492,9728876,51,51,0,0,0,0
+wooppv2_2024,187381785,187382323,12,12,0,0,0,0

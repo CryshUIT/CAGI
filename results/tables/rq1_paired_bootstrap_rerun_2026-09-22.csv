@@ -1,0 +1,2 @@
+n_incidents,m1_mean_pr_auc,b3_mean_pr_auc,mean_diff_m1_minus_b3,ci_low_95,ci_high_95,wilcoxon_stat,wilcoxon_p,ci_contains_zero,n_incidents_m1_gt_b3,n_incidents_m1_lt_b3,n_incidents_tie
+15,0.6623886984073765,0.6874859194543349,0.03554417857525298,-0.02855916966543097,0.12877360812874533,33.0,0.6378701798979456,True,7,5,3

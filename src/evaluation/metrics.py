@@ -14,6 +14,8 @@ import numpy as np
 from sklearn.metrics import (
     average_precision_score,
     f1_score,
+    precision_score,
+    recall_score,
     roc_curve,
 )
 
@@ -40,6 +42,24 @@ def recall_at_fpr(y_true: Sequence[int], y_prob: Sequence[float], max_fpr: float
     if not valid.any():
         return 0.0
     return float(tpr[valid].max())
+
+
+def recall_precision_f1_at_threshold(
+    y_true: Sequence[int], y_prob: Sequence[float], threshold,
+) -> Dict[str, float]:
+    """Recall/Precision/F1 tai threshold da cho (scalar hoac array cung do dai
+    voi y_true/y_prob - dung khi moi dong co threshold rieng, vd oof_threshold
+    tra ve tu evaluate_model_nested, moi dong lay threshold cua fold da giu
+    dong do lam outer test). zero_division=0 (khong co du doan duong -> 0.0,
+    khong loi)."""
+    y_true = np.asarray(y_true)
+    y_prob = np.asarray(y_prob)
+    y_pred = (y_prob >= np.asarray(threshold)).astype(int)
+    return {
+        "recall": float(recall_score(y_true, y_pred, zero_division=0)),
+        "precision": float(precision_score(y_true, y_pred, zero_division=0)),
+        "f1": float(f1_score(y_true, y_pred, zero_division=0)),
+    }
 
 
 def false_alerts_per_1000(y_true: Sequence[int], y_prob: Sequence[float], threshold: float) -> float:

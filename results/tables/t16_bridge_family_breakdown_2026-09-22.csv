@@ -1,0 +1,16 @@
+incident_id,bridge_family_raw,bridge_family,m1_pr_auc
+bsc_token_hub_2022,BSC Token Hub (native BNB Bridge),BSC Token Hub,1.0
+chibi_finance_2023,Stargate (LayerZero);Multichain (AnySwap) Router V6,Stargate (LayerZero),1.0
+deltaprime_arbitrum_2024,"Across Protocol SpokePool (0xe35e9842... - xac nhan qua function signature that depositV3(...) tren tx, da them vao protocol_map.yaml)",Across Protocol,0.8618035190615836
+feg_bridge_2024,FEG SmartBridge (Wormhole-based custom relayer),FEG SmartBridge,0.8303030303030303
+hackerdao_2022,TBD_pending_trajectory_decode,Chưa giải mã được bridge (TBD_pending_trajectory_decode),0.5053179824561403
+magic_abracadabra_arbitrum_2025,LI.FI Diamond (2 bridge_deposit that),LI.FI Diamond,0.9502840909090908
+new_free_dao_2022,TBD_pending_trajectory_decode,Chưa giải mã được bridge (TBD_pending_trajectory_decode),1.0
+paraluni_2022,,Không dùng bridge (NaN trong registry),0.5894277203790993
+qbridge_qubit_2022,QBridge (Qubit Finance),QBridge (Qubit Finance),0.8943452380952381
+radiant_capital_arbitrum_2024,"LI.FI Diamond (56 bridge_deposit that, xac nhan qua decoder)",LI.FI Diamond,1.0
+ronin_bridge_2022,Ronin Bridge,Ronin Bridge,0.6792857142857143
+utopiasphere_2024,LI.FI Diamond,LI.FI Diamond,1.0
+wault_finance_2021,,Không dùng bridge (NaN trong registry),0.928409090909091
+wooppv2_2024,Stargate (LayerZero),Stargate (LayerZero),0.8581043956043957
+xkingdom_2024,Stargate (LayerZero),Stargate (LayerZero),1.0

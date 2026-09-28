@@ -1,0 +1,2 @@
+model,mean_pr_auc,ci_low_95,ci_high_95,paired_diff_vs_m1,paired_ci_low_vs_m1,paired_ci_high_vs_m1,paired_diff_vs_b3,paired_ci_low_vs_b3,paired_ci_high_vs_b3,n_problem_zone,n_fp_v3_problem_zone,mean_prob_v3_problem_zone,mean_prob_m1_official_problem_zone
+M1_v3_path_depth_efficiency,0.6589602749592662,0.5212527665351627,0.8879727353729158,0.0018632688756342979,-0.006938407360527702,0.011940624618819893,0.037407447450887296,-0.025286965758090148,0.12764909841083147,37,16,0.6580059843238544,0.6437197246060178

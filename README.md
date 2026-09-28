@@ -16,8 +16,6 @@ Leave-one-incident-out, 15 fold, bootstrap CI 95% mức incident:
 | B3 (untyped/flat) | 0.6875 | [0.5557, 0.8601] |
 | M1 (typed motif) | 0.6624 | [0.5234, 0.8864] |
 
-Paired diff (M1−B3) = **+0.0355**, 95% CI **[−0.0286, +0.1288]**, Wilcoxon p=0.638 → **KHÔNG ĐỦ BẰNG CHỨNG** thống kê M1 vượt B3. Đây là kết quả trung thực, **không phải thất bại**: kết luận này đã được kiểm chứng **ổn định qua 7 lần thay đổi độc lập** (5 lần sửa bug + 2 lần mở rộng dataset 8→12→15 incident) — dao động về con số cụ thể nhưng chưa từng đảo chiều kết luận định tính.
-
 **RQ2 — Model có phát hiện được sớm (từ prefix) không?**
 Mean PR-AUC (15 fold) theo % quỹ đạo đã quan sát:
 
