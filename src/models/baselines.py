@@ -172,7 +172,13 @@ class B3FlatGraphRandomForest:
       outgoing_incoming_ratio, value_retention, token_category_diversity.
     - temporal TỔNG QUÁT (không tham chiếu bridge): active_duration_sec,
       burstiness, inter_action_gap_mean/std.
-    - prefix_ratio: kích thước tương đối của prefix (không phải thông tin loại).
+
+    Sửa 2026-09-28: bỏ "prefix_ratio" khỏi danh sách — cột này tính bằng
+    prefix_len / len(trajectory) với len(trajectory) là độ dài TOÀN BỘ,
+    chỉ biết được sau khi trajectory kết thúc (xem
+    src/features/extractor.py dòng 589), nên là leak thông tin tương lai
+    (k/n), không phải leak loại giao dịch nhưng vẫn leak. Xem
+    results/reports/prefix_ratio_leak_2026-09-28.md.
     """
 
     name = "B3_flat_graph_rf"
@@ -184,7 +190,6 @@ class B3FlatGraphRandomForest:
         "log_amount_mean", "outgoing_incoming_ratio", "value_retention", "token_category_diversity",
         # temporal tổng quát (KHÔNG gồm time_to_first_bridge — đặc thù bridge)
         "active_duration_sec", "burstiness", "inter_action_gap_mean", "inter_action_gap_std",
-        "prefix_ratio",
     )
 
     def __init__(self, **rf_kwargs) -> None:
@@ -310,7 +315,14 @@ class M1TypedTemporalMotifModel:
     def _candidate_columns(self, X: pd.DataFrame) -> List[str]:
         cols = []
         for c in X.columns:
-            if c in ("prefix_len", "prefix_ratio_meta"):
+            # Sua 2026-09-28: ten cot that la "prefix_ratio" (xem
+            # src/features/extractor.py dong 589 - prefix_len/len(trajectory
+            # DAY DU), khong phai "prefix_ratio_meta" (chua tung la ten cot
+            # that o bat ky version feature nao) - dieu kien cu KHONG BAO GIO
+            # khop nen prefix_ratio lot vao M1, gay future leak (prefix_ratio
+            # can biet do dai CUOI CUNG cua trajectory, chi biet duoc sau khi
+            # ket thuc). Xem results/reports/prefix_ratio_leak_2026-09-28.md.
+            if c in ("prefix_len", "prefix_ratio"):
                 continue
             if c.startswith("action_count_") and not c.endswith("_ratio"):
                 continue  # loại bản thô, giữ bản "_ratio"

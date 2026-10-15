@@ -1,0 +1,31 @@
+idx,incident_id,chain_primary,n_actions_parquet,n_actions_live_rebuild,endpoint_confirmed,endpoint_type,vi_tri_endpoint_dau_tien,neg_main_that,neg_v2c_that,neg_control_that,prefix_row_raw,prefix_row_dedup
+1,ronin_bridge_2022,eth,1625,1625,False,not_yet_traced,khong co,65,9,1,8,8
+2,qbridge_qubit_2022,bsc,698,698,False,not_yet_traced,khong co,35,10,1,8,8
+3,feg_bridge_2024,eth,9,9,True,known_mixer_confirmed,1/9,31,10,1,8,5
+4,deltaprime_arbitrum_2024,arbitrum,23,23,True,bridged_to_ethereum_confirmed,8/23,66,8,1,8,8
+5,bsc_token_hub_2022,bsc,362,362,True,known_bridge_provenance_confirmed,khong co,67,10,1,8,8
+6,chibi_finance_2023,arbitrum,40,40,True,bridged_to_ethereum_confirmed,19/40,25,10,0,8,8
+7,wooppv2_2024,arbitrum,16,16,True,bridged_confirmed,5/16,25,10,0,8,8
+8,utopiasphere_2024,bsc,37,37,True,bridged_confirmed,10/37,23,10,0,8,8
+9,xkingdom_2024,arbitrum,73,73,True,known_mixer_confirmed,1/73,22,10,0,8,8
+10,wault_finance_2021,bsc,190,190,True,known_mixer_confirmed,khong co,22,10,0,8,8
+11,paraluni_2022,bsc,511,511,True,known_mixer_confirmed,khong co,22,10,0,8,8
+12,radiant_capital_arbitrum_2024,arbitrum,248,248,True,bridged_to_ethereum_reported,7/248,25,0,0,8,8
+13,magic_abracadabra_arbitrum_2025,arbitrum,88,88,True,bridged_to_ethereum_reported_stargate,29/88,24,0,0,8,8
+14,hackerdao_2022,bsc,35,35,False,multi_hop_token_conversion_confirmed,21/35,25,0,0,8,8
+15,new_free_dao_2022,bsc,12,12,True,mixer_reported,1/12,23,0,0,8,7
+16,zunami_protocol_2023,eth,31,31,True,known_mixer_confirmed,2/31,25,10,0,8,8
+17,onyx_protocol_2023,eth,16,16,True,known_mixer_confirmed,2/16,25,10,0,8,8
+18,beanstalk_farms_2022,eth,443,443,True,known_mixer_confirmed,164/443,24,9,0,8,8
+19,hedgey_finance_2024,eth,755,755,False,not_yet_traced,khong co,24,5,0,8,8
+20,cork_protocol_2025,eth,1,1,False,not_yet_traced,khong co,24,10,0,4,1
+21,dough_finance_2024,eth,17,17,True,known_mixer_confirmed,7/17,25,9,0,8,7
+22,0xinfini_2025,eth,25,25,True,known_bridge_confirmed,25/25,24,10,0,8,7
+23,prisma_finance_2024,eth,70,70,True,known_mixer_confirmed_pending_onchain_amount_check,12/70,25,1,0,8,8
+24,uranium_finance_2021,eth,64,64,False,reported_mixer_not_found_in_tracking_window,khong co,23,10,0,8,8
+25,inverse_finance_2022_jun,eth,11592,11592,True,known_mixer_confirmed,122/11592,25,1,0,8,8
+26,lendhub_2023,eth,274,274,True,known_mixer_confirmed,123/274,24,5,0,8,8
+27,thorchain2_2021,eth,99,99,False,reported_mixer_outside_tracking_window,khong co,25,10,0,8,8
+28,popsicle_finance_2021,eth,980,980,False,reported_mixer_not_recognized_by_pipeline_label,khong co,25,10,0,8,8
+29,heco_htx_2023,eth,1557,1557,False,reported_mixer_outside_tracking_window,475/1557,25,10,0,8,8
+30,easyfi_2021,eth,16560,16560,False,verified_dex_swap_no_mixer_label,khong co,24,8,0,8,8

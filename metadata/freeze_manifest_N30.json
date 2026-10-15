@@ -1,0 +1,40 @@
+{
+  "created_at_utc": "2026-10-15",
+  "version": "FINAL v2 (sau khi them cot endpoint_basis + 3 cot dem vao incident_registry_N30.csv)",
+  "description": "Freeze manifest BAN CUOI cho dataset expansion N30 (N=30)",
+  "files": {
+    "metadata/incident_registry_N30.csv": {
+      "sha256": "6c627fdd213423cc962b10e2ea0065ffecc0ef9a9f61a6bfb7476589d08856f9",
+      "size_bytes": 62817
+    },
+    "metadata/hard_negative_registry_N30_combined.csv": {
+      "sha256": "52e50d081ce7ac1f6d3b3e71c5f9c27dce7583dec385269ecdee9368d7bf4d62",
+      "size_bytes": 152442
+    },
+    "metadata/hard_negative_registry_v2_complexity_N30_combined.csv": {
+      "sha256": "eed15f7136a8ef7d339ecf4926fa1cce0180c8be076c9d7d0f5032d718bfffc1",
+      "size_bytes": 38604
+    },
+    "metadata/split_manifest_N30.json": {
+      "sha256": "94b46b9c655709521a199e81ff4b1c8db54d2fa21d77ec219ece9ae23e9228bf",
+      "size_bytes": 60144
+    },
+    "metadata/protocol_map_N30.yaml": {
+      "sha256": "6f9fa7225a3f4796f2df3cb30f67ef82a86bae8c06c6e3400622984813a0a8fc",
+      "size_bytes": 17320
+    },
+    "configs/data_N30.yaml": {
+      "sha256": "68715892d3be71fe3f2cca7fd4b4d45aff01937dca6ac759acacf865ccb15738",
+      "size_bytes": 6528
+    },
+    "data/processed/features_v2_N30.parquet": {
+      "sha256": "848d334199645ab07bba1522712ec0296595b5856245b134d5e332b242cf3535",
+      "size_bytes": 220103
+    },
+    "configs/features_v2_computed_N30.json": {
+      "sha256": "292954d995323e5ac3844b93c2695c0bcaeff934f90e35e45e328a6f239bff00",
+      "size_bytes": 2207
+    }
+  },
+  "note": "features_v2_N30.parquet xac nhan byte-identical qua 2 lan rebuild doc lap vao duong dan tam (truoc va sau khi them cot moi vao registry)."
+}

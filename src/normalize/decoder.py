@@ -269,6 +269,7 @@ def decode_normal_tx_row(
     chain_id: int,
     mixer_address_index: Optional[Dict[str, Dict[str, Any]]] = None,
     bridge_address_index: Optional[Dict[str, Dict[str, Any]]] = None,
+    incident_id: Optional[str] = None,
 ) -> Optional[CanonicalEvent]:
     """Decode 1 dòng kết quả `module=account&action=txlist` (native ETH tx).
 
@@ -292,6 +293,16 @@ def decode_normal_tx_row(
     """
     raw_value = int(row.get("value", 0))
     if raw_value == 0:
+        return None
+    # Bug that phat hien 2026-10-14 (dataset expansion N30, mining candidate
+    # cua uranium_finance_2021): tx external TAO CONTRACT (to="", dia chi
+    # contract moi nam o field contractAddress) co value>0 cung gay crash
+    # CanonicalEvent y het truong hop txlistinternal da sua (xem
+    # CONTRACT_CREATION_SKIPPED_STATS phia tren) - quet lai cache hien co
+    # (~4000 file txlist) xac nhan CHI 2 dong nhu vay, CA HAI thuoc cache
+    # uranium_finance_2021 - ap dung CUNG logic bo qua, dong nhat moi incident.
+    if row.get("to", "") == "" or row.get("from", "") == "":
+        _record_skipped_internal_tx(incident_id, raw_value, "normal_tx_empty_to_or_from_contract_creation")
         return None
     src = row["from"].lower()
     dst = row["to"].lower()
@@ -330,11 +341,40 @@ def decode_normal_tx_row(
 _INTERNAL_TX_LOG_INDEX_OFFSET = 900_000
 
 
+#  Bug that phat hien 2026-10-14 (dataset expansion N30, inverse_finance_2022_jun
+#  - trajectory explode toi 1125+ dia chi, cham phai 1 dia chi co internal tx
+#  TAO CONTRACT (contract-creation internal call) kem gia tri ETH > 0): Etherscan
+#  tra `to=""` cho loai internal tx nay (dia chi contract moi nam o field
+#  `contractAddress` thay vi `to`), khien `dst = row["to"].lower()` = "" roi
+#  CanonicalEvent validation that bai (dst phai >=1 ky tu). Quet toan bo cache
+#  hien co (txlist/tokentx/txlistinternal, ~4000 file moi loai): CHI
+#  txlistinternal co 2 dong `to==""` (value!=0, isError!=1) trong toan bo du
+#  lieu da fetch - txlist/tokentx KHONG co dong nao nhu vay, nen KHONG sua 2
+#  decoder do (dung theo yeu cau "chi sua neu cung crash that tren du lieu da
+#  cache"). `from==""` CHUA gap lan nao trong du lieu that (0/~4000 file) -
+#  van them kiem tra phong ngua tuong tu cho internal tx (Etherscan ve ly
+#  thuyet co the tra rong o 1 so edge-case chua gap), ghi ro la PHONG NGUA,
+#  CHUA xac nhan xay ra that.
+CONTRACT_CREATION_SKIPPED_STATS: Dict[str, Dict[str, float]] = {}
+
+
+def _record_skipped_internal_tx(incident_id: Optional[str], raw_value: int, reason: str) -> None:
+    if incident_id is None:
+        return
+    stat = CONTRACT_CREATION_SKIPPED_STATS.setdefault(
+        incident_id, {"count": 0, "total_value_eth": 0.0, "reasons": {}}
+    )
+    stat["count"] += 1
+    stat["total_value_eth"] += raw_value / 1e18
+    stat["reasons"][reason] = stat["reasons"].get(reason, 0) + 1
+
+
 def decode_internal_tx_row(
     row: Dict[str, Any],
     chain_id: int,
     sequence: int,
     bridge_address_index: Optional[Dict[str, Dict[str, Any]]] = None,
+    incident_id: Optional[str] = None,
 ) -> Optional[CanonicalEvent]:
     """Decode 1 dòng kết quả `module=account&action=txlistinternal`.
 
@@ -344,17 +384,29 @@ def decode_internal_tx_row(
     không đồng nhất giữa các internal tx tool).
 
     Trả về None nếu `isError`=='1' (tx internal bị revert, không có value
-    thực sự di chuyển) hoặc value==0.
+    thực sự di chuyển), value==0, hoặc `to`/`from` rỗng (contract-creation
+    internal call — xem comment CONTRACT_CREATION_SKIPPED_STATS phía trên;
+    `from` rỗng là phòng ngừa, chưa xác nhận xảy ra trên dữ liệu thật).
 
     `bridge_address_index`: cùng lý do với decode_normal_tx_row — 1 số bridge
     forward native ETH qua internal call (không phải external tx trực tiếp)
     — thêm 2026-08-14 để đồng bộ 3 decoder ETH-side (tokentx/normal_tx/
     internal_tx) đều check bridge_address_index như BSCTrace đã làm.
+
+    `incident_id`: CHỈ dùng để ghi thống kê dòng bị bỏ do contract-creation
+    (CONTRACT_CREATION_SKIPPED_STATS) — KHÔNG ảnh hưởng logic decode, tùy
+    chọn (None = không ghi thống kê, giữ hành vi cũ cho caller chưa cập nhật).
     """
     if str(row.get("isError", "0")) == "1":
         return None
     raw_value = int(row.get("value", 0))
     if raw_value == 0:
+        return None
+    if row.get("to", "") == "":
+        _record_skipped_internal_tx(incident_id, raw_value, "to_empty_contract_creation")
+        return None
+    if row.get("from", "") == "":
+        _record_skipped_internal_tx(incident_id, raw_value, "from_empty_defensive")
         return None
     src = row["from"].lower()
     dst = row["to"].lower()

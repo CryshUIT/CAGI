@@ -361,6 +361,19 @@ def test_decode_normal_tx_row_skips_zero_value_contract_calls():
     assert ev is None
 
 
+def test_decode_normal_tx_row_skips_contract_creation_empty_to():
+    """Bug that phat hien 2026-10-14 (N30, mining candidate cua
+    uranium_finance_2021): tx external tao contract co to="" (value>0) tung
+    lam CanonicalEvent validation that bai, y het truong hop txlistinternal."""
+    row = dict(SAMPLE_NORMAL_TX_ROW, to="")
+    assert decode_normal_tx_row(row, chain_id=CHAIN_ID) is None
+
+
+def test_decode_normal_tx_row_skips_empty_from_defensive():
+    row = dict(SAMPLE_NORMAL_TX_ROW, **{"from": ""})
+    assert decode_normal_tx_row(row, chain_id=CHAIN_ID) is None
+
+
 SAMPLE_INTERNAL_TX_ROW = {
     "hash": "0x" + "7" * 64,
     "from": "0x" + "5" * 40,
@@ -396,6 +409,35 @@ def test_decode_internal_tx_row_sequence_avoids_log_index_collision():
     ev0 = decode_internal_tx_row(SAMPLE_INTERNAL_TX_ROW, chain_id=CHAIN_ID, sequence=0)
     ev1 = decode_internal_tx_row(dict(SAMPLE_INTERNAL_TX_ROW, hash=SAMPLE_INTERNAL_TX_ROW["hash"]), chain_id=CHAIN_ID, sequence=1)
     assert ev0.log_index != ev1.log_index
+
+
+def test_decode_internal_tx_row_skips_contract_creation_empty_to():
+    """Bug that phat hien 2026-10-14 (N30, inverse_finance_2022_jun): internal
+    tx tao contract co to="" (dia chi contract moi nam o contractAddress,
+    khong phai to) tung lam CanonicalEvent validation that bai. Phai tra ve
+    None thay vi raise."""
+    row = dict(SAMPLE_INTERNAL_TX_ROW, to="", contractAddress="0xdeadbeef00000000000000000000000000000000")
+    assert decode_internal_tx_row(row, chain_id=CHAIN_ID, sequence=0) is None
+
+
+def test_decode_internal_tx_row_skips_empty_from_defensive():
+    """Phong ngua (CHUA gap tren du lieu that - 0/~4000 file cache da quet) -
+    neu Etherscan tra from="" o truong hop nao do, van phai tra None thay vi
+    raise, khong duoc gia dinh from luon hop le."""
+    row = dict(SAMPLE_INTERNAL_TX_ROW, **{"from": ""})
+    assert decode_internal_tx_row(row, chain_id=CHAIN_ID, sequence=0) is None
+
+
+def test_decode_internal_tx_row_records_skip_stats_per_incident():
+    from src.normalize.decoder import CONTRACT_CREATION_SKIPPED_STATS
+
+    CONTRACT_CREATION_SKIPPED_STATS.pop("test_incident_stats_xyz", None)
+    row = dict(SAMPLE_INTERNAL_TX_ROW, to="")
+    decode_internal_tx_row(row, chain_id=CHAIN_ID, sequence=0, incident_id="test_incident_stats_xyz")
+    stat = CONTRACT_CREATION_SKIPPED_STATS["test_incident_stats_xyz"]
+    assert stat["count"] == 1
+    assert stat["total_value_eth"] == pytest.approx(300.0, rel=1e-6)
+    CONTRACT_CREATION_SKIPPED_STATS.pop("test_incident_stats_xyz", None)
 
 
 def test_internal_tx_and_tokentx_same_tx_hash_merge_into_swap():

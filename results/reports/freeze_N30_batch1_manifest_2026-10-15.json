@@ -1,0 +1,70 @@
+{
+  "metadata/incident_registry_N30.csv": {
+    "sha256": "0e3d7d5d3c0320f7c2ec06b5d4b5d98d598ab300d1ac5b875ae6e692135e80d8",
+    "size_bytes": 55762
+  },
+  "metadata/incident_registry_N30_active.csv": {
+    "sha256": "9ce8002caccdd89d38ba593d095b2c5e2c640249e1be90e82c34f57393952338",
+    "size_bytes": 52121
+  },
+  "metadata/hard_negative_registry_N30_batch1_main.csv": {
+    "sha256": "9101efa994d105389d50fe0b32a41d47d7f9c6a8ed721a80c3e1256d0fe11ff2",
+    "size_bytes": 13127
+  },
+  "metadata/hard_negative_registry_N30_batch1_v2complexity.csv": {
+    "sha256": "5734527d64262b4a3e2c30584025816c9cf2b4ecd5eb5d96a092aa34ac7b95bc",
+    "size_bytes": 4482
+  },
+  "metadata/hard_negative_registry_N30_combined.csv": {
+    "sha256": "9cd766440a7b3e7a3080d2654f54926fa2066ccbf8f13d847cfeaa39a8776838",
+    "size_bytes": 132867
+  },
+  "metadata/hard_negative_registry_v2_complexity_N30_combined.csv": {
+    "sha256": "963af661dde62b68ff672e30ac70daba80933cc7a2dd61a6a338a4ce14a69df5",
+    "size_bytes": 31524
+  },
+  "metadata/split_manifest_N30.json": {
+    "sha256": "a9045c48324fbde0953611c0157dda551eafe9cf3d02d6a275b2132ae5b9b774",
+    "size_bytes": 48069
+  },
+  "configs/data_N30.yaml": {
+    "sha256": "e7e5ba580e0c75e9cb5008a6a9b1c05ddd2747491a05a256e39abc55d7ad4d34",
+    "size_bytes": 5130
+  },
+  "metadata/protocol_map_N30.yaml": {
+    "sha256": "8d8ebea8355d2fb93b839d26105be68502f6689f45689ad294c3e73354d8803d",
+    "size_bytes": 15181
+  },
+  "data/processed/features_v2_N30.parquet": {
+    "sha256": "4ac91508c60d2682e65cf34b977ba9054a2c9b58b0cda1fc5e8eb2ee44919a78",
+    "size_bytes": 180502
+  },
+  "configs/features_v2_computed_N30.json": {
+    "sha256": "2c673508cbe02109e7734b0fb5bd9ec53d1de19682d217fafd963f4990c6ba50",
+    "size_bytes": 2174
+  },
+  "src/normalize/decoder.py": {
+    "sha256": "f5ff5ff75ed79ef0fe1f15c037371f4e0d04c7b4af8597b0cfafe32be51ee0b7",
+    "size_bytes": 38405
+  },
+  "src/pipeline/incident_pipeline.py": {
+    "sha256": "46ca520fa292c91f692f0cfc0f3d68a11078d7aa9c1aa3ad39d6c7f2b2ac1e7b",
+    "size_bytes": 21838
+  },
+  "scripts/build_features_v2_N30.py": {
+    "sha256": "327537db2621f5e707643f725dbc2542ab58cf06464df6b805cbf252657a8523",
+    "size_bytes": 5878
+  },
+  "tests/test_n30_reproduces_n20.py": {
+    "sha256": "041044d861bfe33cab15ad52e18df75fa68186af43f7b9e8ea8b2fcde73a545f",
+    "size_bytes": 5068
+  },
+  "tests/test_n30_build_config_guard.py": {
+    "sha256": "ea210697e24cdf5eb88c87f54953ea3bd8ce3d075c4275c6581a52f2faf6c5f2",
+    "size_bytes": 1685
+  },
+  "tests/test_decoders.py": {
+    "sha256": "6fb281bcde871b7b4c22228d2b0fc3133debe4a6debc26b24bb0815075b7bb8b",
+    "size_bytes": 29388
+  }
+}

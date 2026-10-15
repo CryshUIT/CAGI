@@ -1,0 +1,66 @@
+{
+  "metadata/incident_registry_N20.csv": {
+    "sha256": "d7888bbb6d5e503087608b736378d6bbd3fef7dbc9bd8eb8997445581d65eb05",
+    "size_bytes": 48595
+  },
+  "metadata/hard_negative_registry_N20.csv": {
+    "sha256": "f05b60e2b1c0588a5c0dac35f5e09f9bcdd02b9b8284d4e90979bc2102810397",
+    "size_bytes": 22002
+  },
+  "metadata/hard_negative_registry_N20_combined.csv": {
+    "sha256": "23ae7338fe9649d79203df07b7197905f9f8fead70d3c5e623f55efa892b60fb",
+    "size_bytes": 111542
+  },
+  "metadata/hard_negative_registry_v2_complexity_N20.csv": {
+    "sha256": "29c9444da0e5636d547cb87f85d2bae338a6f530076e46c989bba2b9a30e531f",
+    "size_bytes": 8140
+  },
+  "metadata/hard_negative_registry_v2_complexity_N20_combined.csv": {
+    "sha256": "2c6d3f6189861413f69fde8f4f6e71e8ff74413dbe1b36a4d3810c712971efa2",
+    "size_bytes": 26300
+  },
+  "metadata/split_manifest_N20.json": {
+    "sha256": "e6aa0b7ca80a367101ef6435626a083ea1d9a85a7f210eebce94ef6251839b58",
+    "size_bytes": 42491
+  },
+  "configs/data_N20.yaml": {
+    "sha256": "7672d381aaa1193ffff61df434371a8b69ac4118dfffb93289dc86f31b7484d0",
+    "size_bytes": 4699
+  },
+  "metadata/protocol_map_N20.yaml": {
+    "sha256": "b5abaeb5730868be0f52a91073ebf60457eec7f6966b084dd94dc5d85d4c58ff",
+    "size_bytes": 14456
+  },
+  "data/processed/features_v2_N20.parquet": {
+    "sha256": "3c46b35d0185fb21887075a19ddc78f34014396eb72429a23738fc814990cbf4",
+    "size_bytes": 171924
+  },
+  "configs/features_v2_computed_N20.json": {
+    "sha256": "ec48b8f4d7df5fbc98f2e15b406deaa46784412a38eff6cac380c93f28070cc7",
+    "size_bytes": 2116
+  },
+  "scripts/build_features_v2_N20.py": {
+    "sha256": "5b9906bb2e4be2f9a4c42c32faaf6788527849d2f7fcbde61e50634885a2b46d",
+    "size_bytes": 8099
+  },
+  "scripts/_mine_hard_negatives_N20.py": {
+    "sha256": "bf6bb2961d77bc1a12e6c3ae4faa88bf781069966127ee61addc4ee240c186b8",
+    "size_bytes": 7610
+  },
+  "scripts/_mine_hard_negatives_v2_complexity_N20.py": {
+    "sha256": "733ae75bc3e4aff96caebc4871b23257ddba72d32609b87a2624b099c9302e4c",
+    "size_bytes": 5820
+  },
+  "scripts/_run_real_pipeline_N20_seeds.py": {
+    "sha256": "26b6a1684398ad864d90e7cd9a3c17cf806039c0fad174f9be4a1420dab30c18",
+    "size_bytes": 2385
+  },
+  "tests/test_n20_reproduces_v1.py": {
+    "sha256": "0b845b2fec9e672ad4af6accc93000a551d1fcfb04ea79e08214942160f1725f",
+    "size_bytes": 4482
+  },
+  "tests/test_n20_build_config_guard.py": {
+    "sha256": "4bec2b6cd01576d9a34fbd5fe7ad6087e728530153fe62d311792138f7197caa",
+    "size_bytes": 2079
+  }
+}

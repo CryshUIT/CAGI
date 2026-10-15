@@ -1,0 +1,17 @@
+[
+  {
+    "chain_id": 1,
+    "block_number": 22524866,
+    "timestamp": "2025-05-20T14:57:11Z",
+    "tx_hash": "0x82edd98c78c1bec9a3864c7b5f4b685d819f12c131553a1289fbd83f7f276a40",
+    "log_index": 0,
+    "src": "0xea6f30e360192bae715599e15e2f765b49e4da98",
+    "dst": "0x66a9893cc07d91d95644aedd05d03f95e1dba8af",
+    "event_type": "transfer",
+    "amount_norm": 0.79246926918107,
+    "protocol": null,
+    "token": "ETH",
+    "counterparty_type": null,
+    "source_confidence": 1.0
+  }
+]

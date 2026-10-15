@@ -203,11 +203,17 @@ def _load_events_etherscan(
         for row in _load_cached_rows(chain, addr, incident_id, "tokentx"):
             events.append(decode_tokentx_row(row, chain_id=chain_id, bridge_address_index=bridge_index))
         for row in _load_cached_rows(chain, addr, incident_id, "txlist"):
-            ev = decode_normal_tx_row(row, chain_id=chain_id, mixer_address_index=mixer_index, bridge_address_index=bridge_index)
+            ev = decode_normal_tx_row(
+                row, chain_id=chain_id, mixer_address_index=mixer_index, bridge_address_index=bridge_index,
+                incident_id=incident_id,
+            )
             if ev is not None:
                 events.append(ev)
         for row in _load_cached_rows(chain, addr, incident_id, "txlistinternal"):
-            ev = decode_internal_tx_row(row, chain_id=chain_id, sequence=internal_seq, bridge_address_index=bridge_index)
+            ev = decode_internal_tx_row(
+                row, chain_id=chain_id, sequence=internal_seq, bridge_address_index=bridge_index,
+                incident_id=incident_id,
+            )
             internal_seq += 1
             if ev is not None:
                 events.append(ev)
