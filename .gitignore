@@ -8,3 +8,6 @@ data/raw/*
 .DS_Store
 .claude/
 .git.backup/
+reports/
+tables/
+data.zip

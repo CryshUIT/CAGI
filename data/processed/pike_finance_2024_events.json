@@ -1,0 +1,17 @@
+[
+  {
+    "chain_id": 42161,
+    "block_number": 204837787,
+    "timestamp": "2024-04-26T00:19:05Z",
+    "tx_hash": "0x590b9d5fca9cbdd7e0c872890fc9914605c64a30efc09d807ddb3fc2ea28fa27",
+    "log_index": 0,
+    "src": "0xadaf1626aec26a7937ae7d1fa0664e6e0904c1d0",
+    "dst": "0x80c67432656d59144ceff962e8faf8926599bcf8",
+    "event_type": "transfer",
+    "amount_norm": 0.08785427165410054,
+    "protocol": null,
+    "token": "ETH",
+    "counterparty_type": null,
+    "source_confidence": 1.0
+  }
+]
